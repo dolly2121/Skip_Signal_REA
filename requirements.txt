@@ -1,0 +1,13 @@
+pandas
+numpy
+scipy
+scikit-learn
+pyarrow
+pyyaml
+joblib
+matplotlib
+jupyter
+fastapi
+uvicorn[standard]
+pydantic
+pytesttorch
