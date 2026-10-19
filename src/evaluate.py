@@ -90,6 +90,8 @@ def save_results(new_rows):
 def run():
     from src.models.baselines import (RandomRanker, PopularityRanker,
                                       ContentRanker, CFRanker)
+    from src.models.two_tower import TwoTowerRanker
+
     homes = pd.read_parquet(SILVER_HOMES)
     train = pd.read_parquet(GOLD / "train_events.parquet")
     cands = build_test_candidates()
@@ -99,7 +101,8 @@ def run():
           f"positive rate: {(cands.gain > 0).mean() * 100:.1f}%  "
           f"skip rate: {cands.skipped.mean() * 100:.1f}%\n")
 
-    models = [RandomRanker(), PopularityRanker(), ContentRanker(), CFRanker()]
+    models = [RandomRanker(), PopularityRanker(), ContentRanker(), CFRanker(),
+              TwoTowerRanker()]
     results = [evaluate_model(m.fit(train, homes), cands) for m in models]
     table = save_results(results)
     print(table.to_string(index=False))
