@@ -25,17 +25,19 @@ def load_enquiry_probs():
 
 class DealbreakerRanker:
     def __init__(self, base, use_hard=True, use_soft=True,
-                 use_explore=True, use_boost=True, name=None):
+                use_explore=True, use_boost=True, name=None,
+                db_file=GOLD / "dealbreakers_pred.parquet"):
         self.base = base
         self.use_hard, self.use_soft = use_hard, use_soft
         self.use_explore, self.use_boost = use_explore, use_boost
+        self.db_file = db_file
         self.name = name or f"{base.name} + dealbreakers"
 
     def fit(self, train, homes):
         self.base.fit(train, homes)
         flags = [c for c in homes.columns if c.startswith("db_")]
         self.flags = homes.set_index("listing_id")[flags]
-        db = pd.read_parquet(GOLD / "dealbreakers_pred.parquet")
+        db = pd.read_parquet(self.db_file)
         by = lambda lvl: db[db.level == lvl].groupby("buyer_id").category.apply(list).to_dict()
         self.hard, self.soft = by("hard"), by("soft")
         self.p_enq = load_enquiry_probs() if self.use_boost else {}

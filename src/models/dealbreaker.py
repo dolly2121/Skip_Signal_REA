@@ -25,7 +25,7 @@ MIN_SESSIONS_HARD = 3   # no hiding for new buyers
 
 LR_C = 2.0              # logistic regression strength (lower = more shrinkage)
 LR_SOFT_T = 2.5         # odds ratio needed to push homes down
-LR_HARD_T = 3.0         # odds ratio needed to hide homes
+LR_HARD_T = 4.0         # odds ratio needed to hide homes
 
 COLS = ["buyer_id", "category", "score", "n_skips", "n_sessions"]
 

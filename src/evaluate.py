@@ -12,6 +12,7 @@ import pandas as pd
 SILVER_HOMES = Path("data/silver/listings.parquet")
 GOLD = Path("data/gold")
 REPORTS = Path("reports")
+ANSWERS_DB = Path("data/answers/dealbreakers.parquet")
 K = 10
 GAIN = {"enquire": 2, "save": 1}
 STRENGTH = {"leave": -1, "skip": 0, "view": 1, "save": 2, "enquire": 3}
@@ -102,11 +103,18 @@ def run():
           f"positive rate: {(cands.gain > 0).mean() * 100:.1f}%  "
           f"skip rate: {cands.skipped.mean() * 100:.1f}%\n")
 
+    # Oracle: true dealbreakers from the answer file. Evaluation only.
+    truth = pd.read_parquet(ANSWERS_DB)
+    oracle_file = GOLD / "dealbreakers_oracle.parquet"
+    truth.rename(columns={"strength": "level"}).to_parquet(oracle_file, index=False)
+
     models = [
         RandomRanker(), PopularityRanker(), ContentRanker(), CFRanker(),
         TwoTowerRanker(),
         DealbreakerRanker(ContentRanker()),
         DealbreakerRanker(TwoTowerRanker()),
+        DealbreakerRanker(ContentRanker(), db_file=oracle_file,
+                          name="Content + true dealbreakers (oracle)"),
     ]
     results = [evaluate_model(m.fit(train, homes), cands) for m in models]
     table = save_results(results)

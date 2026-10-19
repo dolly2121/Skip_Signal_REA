@@ -11,36 +11,36 @@
 |   |   |   |--- skip_rate >  0.54
 |   |   |   |   |--- truncated branch of depth 2
 |   |--- n_soft_hits >  0.50
-|   |   |--- skip_rate <= 0.36
-|   |   |   |--- log_budget <= 13.53
+|   |   |--- skip_rate <= 0.37
+|   |   |   |--- log_budget <= 13.49
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- log_budget >  13.53
+|   |   |   |--- log_budget >  13.49
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |--- skip_rate >  0.36
+|   |   |--- skip_rate >  0.37
 |   |   |   |--- log_budget <= 13.19
 |   |   |   |   |--- truncated branch of depth 2
 |   |   |   |--- log_budget >  13.19
 |   |   |   |   |--- truncated branch of depth 2
 |--- n_hard_hits >  0.50
-|   |--- skip_rate <= 0.26
-|   |   |--- distance <= 13.95
-|   |   |   |--- room_gap <= -1.75
+|   |--- log_budget <= 13.78
+|   |   |--- log_price <= 13.42
+|   |   |   |--- price_gap <= 0.20
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- room_gap >  -1.75
+|   |   |   |--- price_gap >  0.20
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |--- distance >  13.95
-|   |   |   |--- log_land <= 6.41
+|   |   |--- log_price >  13.42
+|   |   |   |--- log_land <= 9.71
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- log_land >  6.41
+|   |   |   |--- log_land >  9.71
+|   |   |   |   |--- class: leave
+|   |--- log_budget >  13.78
+|   |   |--- skip_rate <= 0.45
+|   |   |   |--- skip_rate <= 0.41
 |   |   |   |   |--- truncated branch of depth 2
-|   |--- skip_rate >  0.26
-|   |   |--- log_land <= 9.71
-|   |   |   |--- price_gap <= -0.13
+|   |   |   |--- skip_rate >  0.41
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- price_gap >  -0.13
+|   |   |--- skip_rate >  0.45
+|   |   |   |--- price_gap <= -0.19
 |   |   |   |   |--- truncated branch of depth 2
-|   |   |--- log_land >  9.71
-|   |   |   |--- distance <= 3.00
-|   |   |   |   |--- truncated branch of depth 2
-|   |   |   |--- distance >  3.00
+|   |   |   |--- price_gap >  -0.19
 |   |   |   |   |--- truncated branch of depth 2
