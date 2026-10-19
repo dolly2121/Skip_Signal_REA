@@ -1,0 +1,10 @@
+variant,precision@10,ndcg@10,wasted_views_%,wrongly_hidden_%
+Full system,0.2666,0.3503,25.9,6.9
+No hard removal,0.2552,0.341,28.6,
+No soft push down,0.2677,0.3492,25.6,6.9
+No explore slot,0.2707,0.3535,25.0,6.9
+No enquiry boost,0.2664,0.3499,25.9,6.9
+No recency weighting,0.27,0.3525,24.8,7.5
+No regularisation (C=100),0.272,0.3456,24.5,13.7
+No 3 session rule,0.268,0.3514,25.6,6.7
+Skip lift instead of logreg,0.2596,0.3445,27.4,7.5

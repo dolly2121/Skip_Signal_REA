@@ -25,7 +25,7 @@ def load_enquiry_probs():
 
 class DealbreakerRanker:
     def __init__(self, base, use_hard=True, use_soft=True,
-                use_explore=True, use_boost=True, name=None,
+                use_explore=True, use_boost=False, name=None,
                 db_file=GOLD / "dealbreakers_pred.parquet"):
         self.base = base
         self.use_hard, self.use_soft = use_hard, use_soft

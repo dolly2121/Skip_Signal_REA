@@ -1,0 +1,4 @@
+metric,mean_change,ci_low,ci_high,real
+ndcg,0.011,0.0073,0.0149,yes
+precision,0.0107,0.0073,0.014,yes
+wasted,-0.0248,-0.0296,-0.0202,yes
