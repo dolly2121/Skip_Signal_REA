@@ -1,12 +1,21 @@
 """FastAPI service: top 10 homes for a buyer, normal or dealbreaker aware."""
 import time
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import FileResponse
 
 from src.serve import Recommender
 
+WEB = Path("web/index.html")
+
 app = FastAPI(title="Skip Signal", version="1.0")
 rec = Recommender()
+
+
+@app.get("/", include_in_schema=False)
+def demo_page():
+    return FileResponse(WEB)
 
 
 @app.get("/health")
