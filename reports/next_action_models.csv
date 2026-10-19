@@ -1,0 +1,6 @@
+model,accuracy,macro_F1,enquire_precision,enquire_recall
+Always most common,0.4,0.114,0.0,0.0
+Logistic regression,0.28,0.232,0.079,0.32
+Decision tree (depth 5),0.189,0.144,0.078,0.801
+Random forest,0.295,0.233,0.079,0.395
+Gradient boosting,0.319,0.247,0.08,0.264

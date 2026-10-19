@@ -1,0 +1,4 @@
+model,MAE_s,quick_exit_F1
+Median (no model),43.85,0.0
+Ridge,42.37,0.035
+Gradient boosting,42.02,0.001
