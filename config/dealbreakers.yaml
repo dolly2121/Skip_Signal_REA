@@ -1,0 +1,19 @@
+categories:
+  no_car_space:
+    label: "No car space"
+    rule: "car == 0"
+  unit:
+    label: "Unit or apartment"
+    rule: "type == 'u'"
+  one_bathroom:
+    label: "One bathroom only"
+    rule: "bathroom <= 1"
+  small_land:
+    label: "Small land"
+    rule: "(type == 'h') & (landsize < 200)"
+  older_build:
+    label: "Older build"
+    rule: "year_built < 1950"
+  far_from_cbd:
+    label: "Far from CBD"
+    rule: "distance > 20"
