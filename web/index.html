@@ -4,185 +4,472 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Skip Signal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&display=swap">
 <style>
   :root {
-    --bg: #ffffff; --card: #ffffff; --ink: #1b1f2a; --muted: #6b7280; --line: #ececec;
-    --brand: #d32f2f; --brand-soft: #fdecec;
-    --skip: #1b1f2a; --view: #9aa1ad; --save: #23935a; --enquire: #2c64c9;
+    --bg: #ffffff; --soft: #f4f4f2; --soft2: #f7f7f5; --ink: #111111; --ink2: #3c4043;
+    --muted: #5f6368; --line: #e6e6e3; --line2: #d5d5d2; --accent: #b3261e; --accent-soft: #fbeae8;
+    --good: #1f6b45;
   }
   * { box-sizing: border-box }
-  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink) }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.45 }
+  button, select { font: inherit }
+  .display { font-family: "Inter Tight", Inter, sans-serif; font-weight: 700 }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px }
 
-  nav { background: var(--card); border-bottom: 1px solid var(--line); padding: 14px 24px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap }
-  .logo { font-weight: 800; font-size: 20px; letter-spacing: -.3px }
-  .logo span { color: var(--brand) }
-  .search { flex: 1; display: flex; gap: 8px; min-width: 260px; max-width: 520px; background: #f7f7f7; border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 16px; align-items: center }
-  .search label { color: var(--muted); font-size: 14px; white-space: nowrap }
-  .search select { flex: 1; border: 0; background: transparent; font: inherit; outline: none }
-  .search button { border: 0; background: var(--brand); color: #fff; font: inherit; font-weight: 600; padding: 8px 18px; border-radius: 999px; cursor: pointer }
+  header { border-bottom: 1px solid var(--line) }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: "Inter Tight", Inter, sans-serif; font-weight: 700; font-size: 18px; background: none; border: 0; cursor: pointer; padding: 0; color: var(--ink) }
+  .logo i { width: 10px; height: 10px; border-radius: 50%; background: var(--accent) }
+  .link { background: none; border: 0; color: var(--muted); font-size: 14px; cursor: pointer; text-decoration: underline; padding: 8px 0 }
 
-  main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 40px }
-  .hero { margin-bottom: 14px }
-  .hero h1 { font-size: 22px; margin: 0 0 4px }
-  .hero p { margin: 0; color: var(--muted) }
+  .screen { display: none; animation: fade .35s ease }
+  .screen.on { display: block }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
 
-  .learned { background: var(--brand-soft); border: 1px solid #f5c2c2; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap }
-  .learned strong { font-size: 14px }
-  .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px }
-  .chip.hard { border-color: var(--brand); color: var(--brand); font-weight: 600 }
+  /* Start */
+  .start { padding-top: 56px; padding-bottom: 72px; display: flex; flex-direction: column; align-items: center; gap: 32px }
+  .eyebrow { font-size: 14px; font-weight: 600; color: var(--accent) }
+  .start h1 { margin: 0; font-size: clamp(36px, 5vw, 48px); letter-spacing: -1.3px; line-height: 1.08; text-align: center }
+  .groups { display: flex; flex-wrap: wrap; gap: 20px; width: 100% }
+  .group { border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 20px }
+  .group.few { flex: 1 1 300px; border: 1px solid var(--line) }
+  .group.many { flex: 2 1 460px; background: var(--ink); color: #fff }
+  .cloud { flex-grow: 1; min-height: 240px; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 4px; margin: 0 auto }
+  .few .cloud { max-width: 200px }
+  .many .cloud { max-width: 520px }
+  .person { border-radius: 50%; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; animation: pop .4s ease both }
+  .person svg { width: 80%; height: 80% }
+  @keyframes pop { from { transform: scale(0) } to { transform: scale(1) } }
+  .big { font-size: 36px; letter-spacing: -0.8px }
+  .group .t { font-size: 17px; font-weight: 600 }
+  .group .s { font-size: 14px; color: var(--muted) }
+  .many .s { color: #bdc1c6 }
+  .tag { font-size: 13px; font-weight: 600; background: var(--accent); color: #fff; padding: 6px 12px; border-radius: 999px; white-space: nowrap }
+  .row { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap }
+  .punch { text-align: center; font-size: clamp(30px, 4.4vw, 44px); line-height: 1.1; letter-spacing: -1.2px; margin: 0 }
+  .punch s { color: #9aa0a6; text-decoration-thickness: 4px }
+  .punch em { color: var(--accent); font-style: normal }
+  .src { font-size: 12px; color: var(--muted); text-align: center }
+  .go { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; max-width: 440px }
+  .go p { margin: 0; font-size: 17px; text-align: center }
+  .go .bar { display: flex; gap: 10px; width: 100%; flex-wrap: wrap }
+  .go select { flex: 1 1 180px; padding: 14px 16px; border: 1px solid var(--line2); border-radius: 12px; background: #fff; min-height: 52px; font-size: 16px }
+  .btn { border: 0; border-radius: 12px; min-height: 52px; padding: 0 28px; font-size: 16px; font-weight: 600; cursor: pointer; background: var(--ink); color: #fff }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line2) }
+  .btn:focus-visible, .seg button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0) }
 
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-bottom: 20px }
-  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px }
-  .stat small { color: var(--muted); display: block }
-  .stat b { font-size: 24px }
-  .stat .arrow { color: var(--muted); font-weight: 400; margin: 0 6px }
+  /* Rate */
+  .rate { max-width: 640px; margin: 0 auto; padding: 32px 24px 64px; display: flex; flex-direction: column; gap: 20px }
+  .progress { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--muted) }
+  .track { height: 6px; background: var(--soft); border-radius: 99px; overflow: hidden }
+  .track div { height: 100%; background: var(--ink); transition: width .3s }
+  .rate h2 { margin: 0; font-size: 30px; letter-spacing: -0.6px; text-align: center }
+  .home { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; transition: transform .25s, opacity .25s }
+  .home.out-no { transform: translateX(-40px) rotate(-3deg); opacity: 0 }
+  .home.out-yes { transform: translateX(40px) rotate(3deg); opacity: 0 }
+  .visuals { display: grid; grid-template-columns: 3fr 2fr }
+  @media (max-width: 560px) { .visuals { grid-template-columns: 1fr } }
+  .photo { position: relative; aspect-ratio: 4 / 3; background: var(--soft); display: flex; align-items: center; justify-content: center; overflow: hidden }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+  .photo .cap { position: absolute; left: 12px; bottom: 10px; font-size: 11px; color: var(--muted); background: rgba(255,255,255,.85); padding: 2px 6px; border-radius: 4px }
+  .photo .no { position: absolute; top: 12px; left: 12px; font-size: 12px; font-weight: 700; background: var(--accent); color: #fff; padding: 4px 10px; border-radius: 999px }
+  .plan { padding: 14px; border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; background: #fff }
+  @media (max-width: 560px) { .plan { border-left: 0; border-top: 1px solid var(--line) } }
+  .plan .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; flex-grow: 1 }
+  .room { border: 1.5px solid var(--ink); border-radius: 4px; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; min-height: 38px; text-align: center; padding: 2px }
+  .room.wide { grid-column: span 2 }
+  .room.car { border-style: dashed; color: var(--muted) }
+  .plan small { font-size: 11px; color: var(--muted) }
+  .info { padding: 18px 20px; display: flex; flex-direction: column; gap: 4px }
+  .price { font-size: 24px; font-weight: 700; letter-spacing: -0.4px }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 8px }
+  .chip { font-size: 14px; background: var(--soft); padding: 6px 12px; border-radius: 999px }
+  .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px }
+  .choices .btn { font-size: 17px; width: 100% }
+  .noticed { background: var(--soft2); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px }
+  .noticed span:first-child { font-size: 13px; color: var(--muted) }
+  .noticed b { color: var(--accent) }
+  .noticed.flash { animation: flash 1.2s ease }
+  @keyframes flash { 0% { background: var(--accent-soft) } 100% { background: var(--soft2) } }
 
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px }
-  @media (max-width: 860px) { .cols { grid-template-columns: 1fr } }
-  .col h2 { font-size: 17px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px }
-  .tag { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--line); color: var(--muted) }
-  .tag.ours { background: var(--brand); color: #fff }
-
-  .listing { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-columns: 150px 1fr; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.06) }
-  .photo { position: relative; background: linear-gradient(135deg, #e9e9e9, #f7f7f7); display: flex; align-items: center; justify-content: center; min-height: 120px }
-  .photo svg { width: 46px; height: 46px; opacity: .35 }
-  .photo .rank { position: absolute; top: 8px; left: 8px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 6px }
-  .badge { position: absolute; bottom: 8px; left: 8px; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; color: #fff; text-transform: uppercase; letter-spacing: .3px }
-  .b-skip { background: var(--skip) } .b-view { background: var(--view) } .b-leave { background: var(--view) }
-  .b-save { background: var(--save) } .b-enquire { background: var(--enquire) }
-
-  .info { padding: 12px 14px }
-  .price { font-size: 19px; font-weight: 800 }
-  .addr { margin-top: 2px }
-  .suburb { color: var(--muted); font-size: 14px }
-  .feats { display: flex; gap: 14px; margin-top: 8px; color: var(--ink); font-size: 14px; align-items: center; flex-wrap: wrap }
-  .feats span { display: inline-flex; align-items: center; gap: 4px }
-  .feats svg { width: 17px; height: 17px }
-  .ptype { color: var(--muted) }
-  .note { margin-top: 8px; font-size: 12px; color: var(--enquire); background: #eef3fc; padding: 4px 8px; border-radius: 6px; display: inline-block }
-
-  .removed .listing { opacity: .7; border-style: dashed }
-  .reason { margin-top: 8px; font-size: 12px; color: var(--brand); background: var(--brand-soft); padding: 4px 8px; border-radius: 6px; display: inline-block }
-  footer { color: var(--muted); font-size: 13px; margin-top: 26px; line-height: 1.5; border-top: 1px solid var(--line); padding-top: 14px }
+  /* Results */
+  .results { padding-top: 40px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 40px }
+  .learned { border: 1px solid var(--line); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 10px }
+  .learned h1 { margin: 0; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; letter-spacing: -0.8px }
+  .learned h1 em { color: var(--accent); font-style: normal }
+  .learned p { margin: 0; font-size: 16px; color: var(--ink2) }
+  .learned .acts { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 6px }
+  .learned .btn { min-height: 44px; padding: 0 16px; font-size: 14px }
+  .head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap }
+  .head h2 { margin: 0; font-size: 24px; letter-spacing: -0.4px }
+  .seg { display: flex; background: #f0f0ee; border-radius: 12px; padding: 4px; gap: 4px }
+  .seg button { border: 0; border-radius: 9px; padding: 0 18px; min-height: 44px; font-size: 15px; font-weight: 600; cursor: pointer; background: transparent; color: var(--muted) }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #fff }
+  .seg button.off[aria-pressed="true"] { background: #fff; color: var(--ink) }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px }
+  .stat { border-radius: 14px; padding: 20px; background: var(--soft); display: flex; flex-direction: column; gap: 4px }
+  .stat:first-child { background: var(--ink); color: #fff }
+  .stat b { font-family: "Inter Tight", Inter, sans-serif; font-size: 40px; letter-spacing: -1px }
+  .caption { margin: 0; font-size: 16px; color: var(--ink2) }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px }
+  .card { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column }
+  .card .info { padding: 16px }
+  .card .price { font-size: 20px }
+  .card .meta { font-size: 13px; color: var(--muted); padding-top: 6px }
+  .card .dist { font-size: 13px; font-weight: 600; color: var(--ink2) }
+  .card .dist.bad { color: var(--accent) }
+  .proof { background: var(--soft2); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 20px }
+  .proof h2 { margin: 0; font-size: 22px }
+  .proof p { margin: 0; font-size: 15px; color: var(--muted) }
+  .legend { display: flex; gap: 20px; font-size: 13px; color: var(--ink2); flex-wrap: wrap }
+  .legend span { display: flex; align-items: center; gap: 6px }
+  .legend i { width: 14px; height: 8px; border-radius: 4px }
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px }
+  .pcard { background: #fff; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px }
+  .pcard > span:first-child { font-size: 15px; font-weight: 600 }
+  .pbar { display: flex; align-items: center; gap: 10px }
+  .pbar .t { flex-grow: 1; height: 10px; background: var(--soft); border-radius: 99px; overflow: hidden }
+  .pbar .t div { height: 100%; width: 0; transition: width .8s ease }
+  .pbar span { font-size: 13px; width: 48px; text-align: right }
+  .verdict { font-size: 14px; font-weight: 600; color: var(--accent) }
+  footer { border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); padding: 24px 0 }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140px); background: var(--ink); color: #fff; padding: 14px 20px; border-radius: 12px; font-weight: 600; max-width: 90vw; transition: transform .3s; z-index: 10; visibility: hidden }
+  .toast.show { transform: translate(-50%, 0); visibility: visible }
 </style>
 </head>
 <body>
-<nav>
-  <div class="logo">Skip<span>Signal</span></div>
-  <div class="search">
-    <label for="buyer">Viewing as buyer</label>
-    <select id="buyer"></select>
-    <button id="go">Show homes</button>
+<header>
+  <div class="wrap">
+    <button class="logo" id="home" aria-label="Skip Signal home"><i></i>Skip Signal</button>
+    <button class="link" id="restart" hidden>Start again</button>
   </div>
-</nav>
+</header>
 
-<main>
-  <div class="hero">
-    <h1 id="title">Recommended homes</h1>
-    <p id="sub">Learns what each buyer does not want, from the homes they keep skipping.</p>
-  </div>
+<!-- 1. START -->
+<section class="screen" id="s-start">
+  <div class="wrap start">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <span class="eyebrow">For first home buyers</span>
+      <h1 class="display">Which one are you?</h1>
+    </div>
 
-  <div class="learned" id="learned"></div>
-  <div class="stats" id="stats"></div>
-
-  <div class="cols">
-    <section class="col">
-      <h2>Normal recommender <span class="tag">today</span></h2>
-      <div id="normal"></div>
-    </section>
-    <section class="col">
-      <h2>Dealbreaker aware <span class="tag ours">Skip Signal</span></h2>
-      <div id="ours"></div>
-      <div class="removed">
-        <h2 style="margin-top:20px">Removed for this buyer</h2>
-        <div id="removed"></div>
+    <div class="groups">
+      <div class="group few">
+        <div class="cloud" id="few" aria-hidden="true"></div>
+        <div>
+          <div class="display big">14 in 100</div>
+          <div class="t">Know exactly what they want</div>
+          <div class="s">Never changed their search. Filters work fine for them.</div>
+        </div>
       </div>
+      <div class="group many">
+        <div class="cloud" id="many" aria-hidden="true"></div>
+        <div class="row">
+          <div>
+            <div class="display big">86 in 100</div>
+            <div class="t" style="color:#bdc1c6">Figure it out as they go</div>
+          </div>
+          <span class="tag">Skip Signal is for you</span>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="display punch">You don't know what you <s>want</s>.<br>But you know exactly what you <em>don't</em>.</h2>
+    <div class="src">Share of recent first time buyers who changed their search along the way. The Mortgage Reports, 2025.</div>
+
+    <div class="go">
+      <p>Say no to a few homes. We hide the rest like them.</p>
+      <div class="bar">
+        <label for="budget" class="vh">Your budget</label>
+        <select id="budget"></select>
+        <button class="btn" id="start">Show us your no list</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. RATE -->
+<section class="screen" id="s-rate">
+  <div class="rate">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="progress"><span id="count">Home 1 of 12</span><button class="link" id="skipto">Skip to my homes</button></div>
+      <div class="track"><div id="bar" style="width:0"></div></div>
+    </div>
+    <h2 class="display">Would you buy this home?</h2>
+    <article class="home" id="card"></article>
+    <div class="choices">
+      <button class="btn ghost" id="no">✕&nbsp; No</button>
+      <button class="btn" id="yes">♥&nbsp; Yes</button>
+    </div>
+    <div class="noticed" id="noticed" aria-live="polite">
+      <span>What we noticed so far</span>
+      <span id="noticedText">Nothing yet. Just go with your gut.</span>
+    </div>
+  </div>
+</section>
+
+<!-- 3. RESULTS -->
+<section class="screen" id="s-results">
+  <div class="wrap results">
+    <section class="learned" id="learned" aria-live="polite"></section>
+
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <div class="head">
+        <h2 class="display">See the difference</h2>
+        <div class="seg" role="group" aria-label="Compare results">
+          <button class="off" id="vOff" aria-pressed="false">Without Skip Signal</button>
+          <button id="vOn" aria-pressed="true">With Skip Signal</button>
+        </div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <p class="caption" id="caption"></p>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <section class="proof">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h2 class="display">Does it really work?</h2>
+        <p>Tested on 1,543 buyers, using 2 weeks of homes they had not seen before.</p>
+      </div>
+      <div class="legend"><span><i style="background:#bdc1c6"></i>Without Skip Signal</span><span><i style="background:#111"></i>With Skip Signal</span></div>
+      <div class="pgrid" id="proof"></div>
     </section>
   </div>
+</section>
 
-  <footer>
-    Replay of the homes this buyer was shown in the last 15 days, with what they really did on each one.
-    Buyer behaviour is simulated. Property data is real (Melbourne). Headline metrics come from the held out test, not this page.
-  </footer>
-</main>
+<footer><div class="wrap">These are real Melbourne homes sold in 2016 and 2017. They are not for sale. The buyers in our test are made up.</div></footer>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
 const $ = id => document.getElementById(id)
 const money = n => "$" + n.toLocaleString("en-AU")
-const liked = list => list.filter(h => h.actual === "save" || h.actual === "enquire").length
 const TYPES = { h: "House", u: "Unit", t: "Townhouse" }
+const RATE_TARGET = 12
+const PHRASE = {
+  far_from_cbd: ["You don't like homes ", "far from the city."],
+  unit: ["You don't like ", "units or apartments."],
+  one_bathroom: ["You don't like homes with ", "only one bathroom."],
+  no_car_space: ["You don't like homes with ", "no car space."],
+  small_land: ["You don't like homes on ", "small blocks of land."],
+  older_build: ["You don't like homes ", "built before 1950."],
+}
+const SHORT = { far_from_cbd: "homes far from the city", unit: "units and apartments", one_bathroom: "homes with one bathroom",
+  no_car_space: "homes with no car space", small_land: "homes on small blocks", older_build: "homes built before 1950" }
+const PERSON = c => `<svg viewBox="0 0 24 24" fill="${c}" aria-hidden="true"><circle cx="12" cy="9" r="4.5"/><path d="M3 24c0-5 4-8.5 9-8.5s9 3.5 9 8.5z"/></svg>`
+const HOUSE = '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg>'
 
-const ICON = {
-  house: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>',
-  bed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-7h18v7M3 14h18M7 11V8h4v3"/></svg>',
-  bath: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM6 12V6a2 2 0 0 1 4 0"/></svg>',
-  car: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 16h14M6 16l1.5-5h9L18 16M7 19v-3M17 19v-3"/></svg>'
+let S = { screen: "start", budget: 750000, actions: [], ignore: [], locked: [], view: "on", target: RATE_TARGET }
+let D = null
+let known = new Set()
+
+function save() { try { localStorage.setItem("skipsignal2", JSON.stringify(S)) } catch (e) {} }
+function load() { try { const s = JSON.parse(localStorage.getItem("skipsignal2")); if (s && s.budget) S = { ...S, ...s } } catch (e) {} }
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 3500) }
+
+function show(name) {
+  S.screen = name; save()
+  for (const id of ["start", "rate", "results"]) $("s-" + id).classList.toggle("on", id === name)
+  $("restart").hidden = name === "start"
+  window.scrollTo({ top: 0, behavior: "smooth" })
 }
 
-async function getJSON(url) {
-  const r = await fetch(url)
-  if (!r.ok) throw new Error(await r.text())
-  return r.json()
+/* ---------- start screen ---------- */
+function cloud(el, n, tones, ink, seed) {
+  const sizes = [26, 30, 34, 38, 42]
+  let s = seed, html = ""
+  for (let i = 0; i < n; i++) {
+    s = (s * 9301 + 49297) % 233280
+    const px = sizes[Math.floor(s / 233280 * sizes.length)]
+    html += `<div class="person" style="width:${px}px;height:${px}px;background:${tones[i % tones.length]};animation-delay:${i * 8}ms">${PERSON(ink)}</div>`
+  }
+  el.innerHTML = html
 }
 
-function listing(h, rank) {
-  const badge = h.actual ? `<span class="badge b-${h.actual}">${h.actual}</span>` : ""
-  const rankTag = rank ? `<span class="rank">#${rank}</span>` : ""
-  const note = h.note ? `<div class="note">${h.note}</div>` : ""
-  const reason = h.reason ? `<div class="reason">${h.reason}</div>` : ""
-  return `<article class="listing">
-    <div class="photo">${ICON.house}${rankTag}${badge}</div>
+/* ---------- api ---------- */
+async function learn(k) {
+  const r = await fetch("/learn", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ budget: S.budget, actions: S.actions, ignore: S.ignore, locked: S.locked, k }) })
+  if (!r.ok) throw new Error("learn failed")
+  D = await r.json()
+  S.locked = D.learned.filter(x => x.level === "hard").map(x => x.category)
+  save()
+  return D
+}
+
+/* ---------- shared pieces ---------- */
+function photo(h, bad) {
+  const img = h.photo ? `<img src="${h.photo}" alt="Street view of ${h.address}" loading="lazy" onerror="this.remove()">` : ""
+  return `<div class="photo">${HOUSE}${img}<span class="cap">${h.photo ? "Street View" : "Photo coming soon"}</span>${bad ? '<span class="no">You\'d say no</span>' : ""}</div>`
+}
+function plan(h) {
+  const beds = Math.min(h.rooms, 5), baths = Math.min(h.bathroom, 3), cars = Math.min(h.car, 3)
+  let cells = `<div class="room wide">Living</div><div class="room">Kitchen</div>`
+  for (let i = 0; i < beds; i++) cells += `<div class="room">Bed</div>`
+  for (let i = 0; i < baths; i++) cells += `<div class="room">Bath</div>`
+  for (let i = 0; i < cars; i++) cells += `<div class="room car">Car</div>`
+  if (!cars) cells += `<div class="room car" style="border-color:var(--accent);color:var(--accent)">No car</div>`
+  return `<div class="plan"><div class="grid">${cells}</div><small>Rooms from the listing. Not the real floor plan.</small></div>`
+}
+const learnedCats = () => D ? D.learned.map(x => x.category) : []
+const isBad = h => h.flags.some(f => learnedCats().includes(f))
+
+/* ---------- rate screen ---------- */
+function renderRate() {
+  const h = D.homes[0]
+  const n = S.actions.length
+  $("count").textContent = `Home ${Math.min(n + 1, S.target)} of ${S.target}`
+  $("bar").style.width = (n / S.target * 100) + "%"
+  $("skipto").hidden = n < 6
+  if (!h) { show("results"); renderResults(); return }
+  $("card").className = "home"
+  $("card").innerHTML = `
+    <div class="visuals">${photo(h, false)}${plan(h)}</div>
     <div class="info">
       <div class="price">${money(h.price)}</div>
-      <div class="addr">${h.address}</div>
-      <div class="suburb">${h.suburb} · ${h.distance_km} km to CBD</div>
-      <div class="feats">
-        <span>${ICON.bed}${h.rooms}</span>
-        <span>${ICON.bath}${h.bathroom}</span>
-        <span>${ICON.car}${h.car}</span>
-        <span class="ptype">${TYPES[h.type] || h.type}</span>
+      <div>${h.address}, ${h.suburb}</div>
+      <div class="chips">
+        <span class="chip">${TYPES[h.type] || h.type}</span>
+        <span class="chip">${h.rooms} bedrooms</span>
+        <span class="chip">${h.bathroom} bathroom${h.bathroom > 1 ? "s" : ""}</span>
+        <span class="chip">${h.car} car space${h.car === 1 ? "" : "s"}</span>
+        <span class="chip">${h.distance_km} km from the city</span>
       </div>
-      ${note}${reason}
-    </div>
-  </article>`
+    </div>`
+  const top = D.learned[0]
+  if (top) {
+    $("noticedText").innerHTML = `You keep saying no to <b>${SHORT[top.category]}</b> (${top.skipped} of ${top.seen}). ${top.level === "hard" ? "We're hiding them now." : "We're showing them less."}`
+  } else {
+    $("noticedText").textContent = S.actions.length < 6 ? "Nothing yet. Just go with your gut." : "No clear pattern yet. Keep going."
+  }
+  D.learned.forEach(x => {
+    const key = x.category + x.level
+    if (!known.has(key)) { known.add(key); $("noticed").classList.remove("flash"); void $("noticed").offsetWidth; $("noticed").classList.add("flash") }
+  })
 }
 
-function stat(label, a, b) {
-  return `<div class="stat"><small>${label}</small><b>${a}<span class="arrow">→</span>${b}</b><small>normal → Skip Signal</small></div>`
+let busy = false
+async function answer(action) {
+  const h = D && D.homes[0]
+  if (!h || busy) return
+  busy = true
+  $("card").classList.add(action === "skip" ? "out-no" : "out-yes")
+  S.actions.push({ listing_id: h.listing_id, action })
+  await learn(1)
+  setTimeout(() => {
+    if (S.actions.length >= S.target) { show("results"); renderResults() }
+    else renderRate()
+    busy = false
+  }, 220)
 }
 
-async function show() {
-  const b = $("buyer").value
-  const base = `/recommend/${b}?source=replay`
-  const [n, d] = await Promise.all([getJSON(base + "&mode=normal"), getJSON(base + "&mode=dealbreaker")])
-
-  $("title").textContent = `Recommended homes for buyer ${b}`
-  $("sub").textContent = `Budget around ${money(d.budget)}`
-
-  $("learned").innerHTML = `<strong>We learned this buyer skips:</strong>` +
-    d.dealbreakers.map(x => `<span class="chip ${x.level}">${x.label} · ${x.level} · skipped ${x.skipped}</span>`).join("")
-
-  $("stats").innerHTML =
-    stat("Skipped homes in top 10", n.skipped_in_top, d.skipped_in_top) +
-    stat("Saved or enquired in top 10", liked(n.homes), liked(d.homes)) +
-    `<div class="stat"><small>Removed homes the buyer liked</small><b>${d.removed_but_liked}</b><small>wrongly hidden</small></div>` +
-    `<div class="stat"><small>Response time</small><b>${d.latency_ms} ms</b><small>Skip Signal API</small></div>`
-
-  $("normal").innerHTML = n.homes.map((h, i) => listing(h, i + 1)).join("")
-  $("ours").innerHTML = d.homes.map((h, i) => listing(h, i + 1)).join("")
-  $("removed").innerHTML = d.removed.length
-    ? d.removed.map(h => listing(h)).join("")
-    : `<p class="suburb">Nothing removed for this buyer.</p>`
+/* ---------- results screen ---------- */
+async function renderResults() {
+  await learn(6)
+  const top = D.learned.find(x => x.level === "hard") || D.learned[0]
+  if (top) {
+    const [a, b] = PHRASE[top.category]
+    $("learned").innerHTML = `
+      <span style="font-size:14px;color:var(--muted)">We noticed</span>
+      <h1 class="display">${a}<em>${b}</em></h1>
+      <p>You said no to ${top.skipped} out of ${top.seen} homes like this. ${top.level === "hard" ? "So we hid them." : "So we show them less."}</p>
+      <div class="acts"><button class="btn ghost" data-undo="${top.category}">That's wrong, show them again</button></div>`
+  } else {
+    $("learned").innerHTML = `
+      <span style="font-size:14px;color:var(--muted)">We noticed</span>
+      <h1 class="display">No clear pattern yet.</h1>
+      <p>Say no to a few more homes you don't like, and we'll spot it.</p>
+      <div class="acts"><button class="btn" id="more">Rate 6 more homes</button></div>`
+  }
+  renderCompare()
+  renderProof()
 }
+
+function renderCompare() {
+  const on = S.view === "on"
+  $("vOn").setAttribute("aria-pressed", on)
+  $("vOff").setAttribute("aria-pressed", !on)
+  const list = on ? D.homes : D.normal_homes
+  const bad = list.filter(isBad).length
+  const hidden = on ? D.hidden : 0
+  const left = D.in_budget - hidden
+  $("stats").innerHTML = `
+    <div class="stat"><b>${bad} of ${list.length}</b><span>top homes you would say no to</span></div>
+    <div class="stat"><b>${hidden.toLocaleString("en-AU")}</b><span>homes hidden for you</span></div>
+    <div class="stat"><b>${left.toLocaleString("en-AU")}</b><span>homes left to look through</span></div>`
+  $("caption").textContent = !learnedCats().length
+    ? "Both look the same until we learn what you don't like."
+    : on ? "Every home here is one you might want." : "This is a normal home site. It ignores every no you gave it."
+  $("cards").innerHTML = list.map(h => {
+    const b = isBad(h)
+    return `<article class="card">${photo(h, b)}
+      <div class="info">
+        <div class="price">${money(h.price)}</div>
+        <div>${h.address}, ${h.suburb}</div>
+        <div class="meta">${TYPES[h.type] || h.type} · ${h.rooms} bed · ${h.bathroom} bath · ${h.car} car</div>
+        <div class="dist ${b ? "bad" : ""}">${h.distance_km} km from the city</div>
+      </div></article>`
+  }).join("")
+}
+
+function renderProof() {
+  const P = [
+    ["Homes buyers said no to, in their top 10", "28.3%", "25.9%", 57, 52, "8.5% fewer unwanted homes"],
+    ["Homes buyers saved, in their top 10", "25.6%", "26.6%", 51, 53, "4% more good matches"],
+    ["Buyers who contacted an agent", "6.8%", "7.8%", 68, 78, "14% more enquiries"],
+  ]
+  $("proof").innerHTML = P.map(([l, a, b, wa, wb, v]) => `
+    <div class="pcard"><span>${l}</span>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="pbar"><div class="t"><div data-w="${wa}" style="background:#bdc1c6"></div></div><span style="color:var(--muted)">${a}</span></div>
+        <div class="pbar"><div class="t"><div data-w="${wb}" style="background:#111"></div></div><span style="font-weight:700">${b}</span></div>
+      </div><span class="verdict">${v}</span></div>`).join("")
+  requestAnimationFrame(() => document.querySelectorAll("[data-w]").forEach(el => el.style.width = el.dataset.w + "%"))
+}
+
+/* ---------- events ---------- */
+$("start").onclick = async () => {
+  S = { ...S, budget: +$("budget").value, actions: [], ignore: [], locked: [], view: "on", target: RATE_TARGET }
+  known = new Set()
+  await learn(1); show("rate"); renderRate()
+}
+$("no").onclick = () => answer("skip")
+$("yes").onclick = () => answer("save")
+$("skipto").onclick = () => { show("results"); renderResults() }
+$("vOn").onclick = () => { S.view = "on"; save(); renderCompare() }
+$("vOff").onclick = () => { S.view = "off"; save(); renderCompare() }
+$("restart").onclick = $("home").onclick = () => show("start")
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button")
+  if (!b) return
+  if (b.dataset.undo) {
+    S.ignore.push(b.dataset.undo); S.locked = S.locked.filter(c => c !== b.dataset.undo)
+    toast("Done. Those homes are back.")
+    renderResults()
+  } else if (b.id === "more") {
+    S.target = S.actions.length + 6; await learn(1); show("rate"); renderRate()
+  }
+})
+document.addEventListener("keydown", e => {
+  if (!$("s-rate").classList.contains("on")) return
+  if (e.key === "ArrowLeft") answer("skip")
+  if (e.key === "ArrowRight") answer("save")
+})
 
 async function init() {
-  const { buyers } = await getJSON("/buyers?demo=true&limit=50")
-  $("buyer").innerHTML = buyers.map(b => `<option>${b}</option>`).join("")
-  $("go").onclick = show
-  $("buyer").onchange = show
-  show()
+  load()
+  cloud($("few"), 14, ["#2b2b2b", "#3c3c3c", "#4a4a4a", "#1e1e1e", "#575757"], "#ffffff", 7)
+  cloud($("many"), 86, ["#ffffff", "#e8eaed", "#d5d7da", "#c4c7ca", "#f1f3f4"], "#111111", 11)
+  const { budgets } = await (await fetch("/budgets")).json()
+  $("budget").innerHTML = budgets.map(b => `<option value="${b}">Budget around ${money(b)}</option>`).join("")
+  $("budget").value = S.budget
+  if (S.screen === "rate" && S.actions.length) { await learn(1); show("rate"); renderRate() }
+  else if (S.screen === "results") { show("results"); renderResults() }
+  else show("start")
 }
-init()
+init().catch(() => { show("start"); toast("Waking up the server. Refresh in a few seconds.") })
 </script>
 </body>
 </html>
