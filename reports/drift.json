@@ -1,0 +1,38 @@
+{
+  "reference_days": "1 to 45",
+  "current_days": "54 to 60",
+  "simulated_shift": true,
+  "alert": true,
+  "checks": [
+    {
+      "check": "price of homes shown",
+      "psi": 0.217,
+      "alert": true
+    },
+    {
+      "check": "rooms of homes shown",
+      "psi": 0.0,
+      "alert": false
+    },
+    {
+      "check": "distance of homes shown",
+      "psi": 0.001,
+      "alert": false
+    },
+    {
+      "check": "bathroom of homes shown",
+      "psi": 0.0,
+      "alert": false
+    },
+    {
+      "check": "car of homes shown",
+      "psi": 0.0,
+      "alert": false
+    },
+    {
+      "check": "buyer skip rate",
+      "psi": 0.167,
+      "alert": false
+    }
+  ]
+}
