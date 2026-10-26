@@ -68,58 +68,47 @@ Held out test days 46 to 60, 1,543 buyers.
 
 ## 🧭 How to use it
 
-### Option 1: the demo page (no code)
+### Option 1: the website (no code)
 
-1. Open the [live demo](https://skip-signal-272542756101.australia-southeast2.run.app). First load can take 10 seconds.
-2. Pick a buyer from the **Viewing as buyer** list and click **Show homes**.
-3. Read the page:
+Open the [live site](https://skip-signal-272542756101.australia-southeast2.run.app). The first load can take 10 seconds.
 
-| You see | What it means |
-|---|---|
-| 🔴 **We learned this buyer skips** | The dealbreakers the model found, and how many times the buyer skipped them |
-| 📊 **Stat cards** | Normal vs Skip Signal: skips and saves in the top 10, wrongly hidden homes, response time |
-| ⬅️ **Normal recommender** | Top 10 without dealbreakers |
-| ➡️ **Dealbreaker aware** | Top 10 from Skip Signal |
-| 🗑️ **Removed for this buyer** | Homes taken out, each with a reason |
-| 🏷️ **SKIP / VIEW / SAVE / ENQUIRE** | What the buyer really did on that home |
+| Screen | What you do | What you see |
+|---|---|---|
+| **1. Start** | Pick a budget, click **Show us your no list** | 14 in 100 buyers know what they want. 86 in 100 figure it out as they go. |
+| **2. Yes or no** | Say **No** or **Yes** to 12 real homes (or use the ← → keys) | A Street View photo, a room layout and the home's details. A live box shows what the model is noticing. |
+| **3. Your homes** | Flip the **With and Without Skip Signal** toggle | What it learned, how many homes it hid, and your top homes with and without the model |
+
+**Tip:** pick one thing you dislike, for example units, and say no to every one. After about 10 homes it spots the pattern.
+
+The model is the same logistic regression used offline. It is fitted on your own clicks, live, each time you answer. No login and no personal data. Your clicks stay in your browser.
 
 ### Option 2: the API
 
-**Input:** a buyer ID, plus two optional settings.
-
-| Setting | Values | Default |
-|---|---|---|
-| `buyer_id` | e.g. `b1537` (get IDs from `/buyers?demo=true`) | required |
-| `mode` | `normal` or `dealbreaker` | `dealbreaker` |
-| `source` | `live` (homes in budget) or `replay` (homes the buyer was shown) | `live` |
-| `k` | how many homes, 1 to 50 | `10` |
+**Live learning:** send the homes a visitor said yes or no to.
 
 ```
-GET /recommend/b1537?mode=dealbreaker&source=replay
-```
-
-**Output:** JSON with the buyer's dealbreakers, the top homes, and the removed homes with reasons.
-
-```json
+POST /learn
 {
-  "buyer_id": "b1537",
-  "budget": 815500,
-  "dealbreakers": [
-    {"label": "Far from CBD", "level": "hard", "skipped": 57}
-  ],
-  "homes": [
-    {"address": "13 Merrill St", "suburb": "Mulgrave", "price": 757000,
-     "rooms": 3, "bathroom": 1, "car": 1, "distance_km": 18.8}
-  ],
-  "removed": [
-    {"address": "10 Plover Cl", "suburb": "Frankston", "distance_km": 38.0,
-     "reason": "Removed: far from CBD. You skipped 57 like this."}
-  ],
-  "latency_ms": 18.6
+  "budget": 750000,
+  "actions": [{"listing_id": 1234, "action": "skip"}, {"listing_id": 5678, "action": "save"}],
+  "k": 6
 }
 ```
 
-Other endpoints: `GET /health` (model version and counts) · `GET /buyers?demo=true` (buyer IDs to try).
+**Output:** what it learned, how many homes it hid, and the next homes with and without the model.
+
+```json
+{
+  "learned": [{"label": "Far from CBD", "level": "hard", "skipped": 4, "seen": 4}],
+  "in_budget": 363,
+  "hidden": 83,
+  "homes": [{"address": "13 Merrill St", "suburb": "Mulgrave", "price": 757000, "rooms": 3}],
+  "normal_homes": [{"address": "10 Plover Cl", "suburb": "Frankston", "price": 634000, "rooms": 3}],
+  "latency_ms": 12.4
+}
+```
+
+Other endpoints: `GET /budgets` (budget options) · `GET /health` (model version and counts) · `GET /recommend/{buyer_id}` (a simulated test buyer).
 
 ---
 
@@ -289,6 +278,8 @@ Open http://127.0.0.1:8000/ or run in Docker:
 docker build -t skip-signal .
 docker run -p 8080:8080 skip-signal
 ```
+
+**Photos:** set a Google Street View Static API key as the `STREETVIEW_KEY` environment variable on Cloud Run. Restrict the key to your site and to that one API, and cap the daily quota. Without a key, cards show a drawing instead.
 
 **API:** `GET /health` · `GET /buyers?demo=true` · `GET /recommend/{buyer_id}?mode=dealbreaker`
 
